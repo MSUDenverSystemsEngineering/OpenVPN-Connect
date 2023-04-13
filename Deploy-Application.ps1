@@ -142,7 +142,7 @@ Try {
 		}
 
 		## <Perform Installation tasks here>
-		$exitCode = Execute-MSI -Action 'Install' -Path "$dirFiles\openvpn-connect-3.3.7.2979_signed.msi" -Parameters 'REBOOT=ReallySuppress /QN'
+		$exitCode = Execute-MSI -Action 'Install' -Path "$dirFiles\openvpn-connect-3.3.7.2979_signed.msi" -Parameters 'REBOOT=ReallySuppress /QN AUTOSTART=NO'
 		If (($exitCode.ExitCode -ne "0") -and ($mainExitCode -ne "3010")) {$mainExitCode =$exitCode.ExitCode }
 
 		##*===============================================
@@ -151,12 +151,8 @@ Try {
 		[string]$installPhase = 'Post-Installation'
 
 		## <Perform Post-Installation tasks here>
-		##Remove Registry Key for startup
-		Remove-RegistryKey -Key 'HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run' -Name 'org.openvpn.client'
-		Remove-RegistryKey -Key 'HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run' -Name 'org.openvpn.client'
 		##Remove Desktop Icon
 		Remove-File -Path "$envCommonDesktop\OpenVPN Connect.lnk"
-		Remove-File -Path "$env:Public\Desktop\OpenVPN Connect.link"
 		## Display a message at the end of the install
 		If (-not $useDefaultMsi) {}
 	}
@@ -251,8 +247,8 @@ Catch {
 # SIG # Begin signature block
 # MIImVgYJKoZIhvcNAQcCoIImRzCCJkMCAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCDeBe26ycMS28Qo
-# sxDirl2MRYe979JNPPoi2/TiyKbVSKCCH8EwggVvMIIEV6ADAgECAhBI/JO0YFWU
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCDbn0e/8TDujfFR
+# ZGsev6dYzN37eQWEoTANN9sK++NqOKCCH8EwggVvMIIEV6ADAgECAhBI/JO0YFWU
 # jTanyYqJ1pQWMA0GCSqGSIb3DQEBDAUAMHsxCzAJBgNVBAYTAkdCMRswGQYDVQQI
 # DBJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcMB1NhbGZvcmQxGjAYBgNVBAoM
 # EUNvbW9kbyBDQSBMaW1pdGVkMSEwHwYDVQQDDBhBQUEgQ2VydGlmaWNhdGUgU2Vy
@@ -426,32 +422,32 @@ Catch {
 # ZDErMCkGA1UEAxMiU2VjdGlnbyBQdWJsaWMgQ29kZSBTaWduaW5nIENBIFIzNgIR
 # AKVN33D73PFMVIK48rFyyjEwDQYJYIZIAWUDBAIBBQCggYQwGAYKKwYBBAGCNwIB
 # DDEKMAigAoAAoQKAADAZBgkqhkiG9w0BCQMxDAYKKwYBBAGCNwIBBDAcBgorBgEE
-# AYI3AgELMQ4wDAYKKwYBBAGCNwIBFTAvBgkqhkiG9w0BCQQxIgQg37IUa0eU8wdp
-# KqOKATLwnlfkrhsjuA43Hc7MDpOD5RUwDQYJKoZIhvcNAQEBBQAEggGAAKj1cY64
-# wGKaAJjBc91UfUOlktSf5G/Sphn00Lf05yKb1bOpruiNPpzKQvD1NIICn7G8ybuk
-# QxRJw3FxeVhwzI1YAr62zzRBq6fRG5B4lhdfibVrdk6VPJX+wNPbN/TfMUEfwGYv
-# wv7nxzjFM2/5ySC6jbNPvBlwGPgqo5LnaiZB85hRmPpymVthjZxq3kuO2ZthbdmV
-# SvLZ0ZMLcs8iLB+szUyb/2XW2ocX8rf6H99tug/u/APdLGDDjPTiaBJSEtVXczms
-# /WRA83WUf1dijtOPiN4u7nug6PtwUP6V+m/mEwRb3XEOpaqwcRm/9B8Wr3QPFuBv
-# Sj0O/IfAEP5r+sptDNQkZJd2mEfx2RGLpCzcfi0DE1IbyksJlpz2k0Oo5cyYeCON
-# 721N8JjEGsxyzj/W5C74ilCDdm0GtchILBV/OSeWQqQ3ZQlWHJr4CGL1UB+TRt2g
-# xs+JTw7b6kp6lqGb8iyVqmLf5HCIabggr9kMa9l5KWbYEiRT3O9PF3UqoYIDTDCC
+# AYI3AgELMQ4wDAYKKwYBBAGCNwIBFTAvBgkqhkiG9w0BCQQxIgQgYYhjiceBAS6u
+# ClEU98OAuaZqtifpk6O6xTNSU0tAWp0wDQYJKoZIhvcNAQEBBQAEggGAncOmHHVG
+# KLsN8m9/wcobFfSqMwQTFoal0529l8A1gBrwDRqBi5no7iwq9fcorlI5RoPqd1Sw
+# /5OA3ICKVK57WphjEELmvwB6puKp9OY4aWB+KMxQ9cwI+D9/POkAcOS2l8MXDHBc
+# Gp6fYY7HoBWtabAVbn1A+1hm8Po1X2aUbrN9669NDHAFb71KAxKBiX7PAsGjl4xj
+# l0OEZA1vc1ToU0UH/0GjFX6zJzRN/mu//BVPHlO/6VBTY10DdWjT/wifAQ4+zdEH
+# Ft48DvhvgBLsQPbkyX6HpxEEpk1wc+AkJC5Z/wALiaKvvHtVv86qRLHnG89eEaX0
+# s/ZuzlX2qdA44oUVxLJs6f/VEV9xQcLr6AaizxZw81P9FmAYGSJVnx6L03NkClY0
+# ZcA9GQp6bJvnu56XImykB09HrgZrk0FNqpRaK16C95wjryTT9SJ7Lj15PxXYDuXL
+# SH4j6njUoMWvoWKoZeuG2SxBeHMV6XjaF7cF9G8wOMkhYppiNA80d+h3oYIDTDCC
 # A0gGCSqGSIb3DQEJBjGCAzkwggM1AgEBMIGSMH0xCzAJBgNVBAYTAkdCMRswGQYD
 # VQQIExJHcmVhdGVyIE1hbmNoZXN0ZXIxEDAOBgNVBAcTB1NhbGZvcmQxGDAWBgNV
 # BAoTD1NlY3RpZ28gTGltaXRlZDElMCMGA1UEAxMcU2VjdGlnbyBSU0EgVGltZSBT
 # dGFtcGluZyBDQQIRAJA5f5rSSjoT8r2RXwg4qUMwDQYJYIZIAWUDBAICBQCgeTAY
-# BgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMzA0MDUx
-# NzE5MzlaMD8GCSqGSIb3DQEJBDEyBDBIncgmv0TZQheWWab2xT/daVBrSjveG7fB
-# 9Eqz8PrD11WLUvrRK9agozi/Q4ZKgLUwDQYJKoZIhvcNAQEBBQAEggIADx28xyt9
-# 14RghaPy6DFROj6052Wn+4IBWAorlrgJtGHN/qXJOFoKujYIENF0mqJchaFq+bvH
-# 4knBzpZAYg7zGJn88o9C/ah9NMkpKPDYDcMJsZRsjT6jptz5H1myOGCuadV5QRQO
-# Aa5eWlZLPYlQs7NHvS8kS89r2gbzSyFB+W9HT+q97fLklzx+rzxT8HD0oizN3xoN
-# NcO2rzXiWWt6yAd/CLdbueDkUqBYWrm5aN3YVfr+bX9ylLokYFj8qMQm2gTKT3/6
-# TQAsBvd5bJfHwgA1myQNaaqK0E6/GWTjCquGnveWChKIuzSViCOIcM+X0TplS+JL
-# c2lDzozrGdT6opB82nCFA+7EH8kMze2iyicd0Z0pU9t/oFxxPpf+917InSjcLq5R
-# o0JwPj+h3IMWQpHvie3iyP7+Y8yqO6hslWO91jiU8e4wT2PKfnJ8Xvpvlsg7OXc9
-# 7IwYwNHYm0750F3bVzFpjVTvC/MC3909zlffTns8wh+nQ+K6EZhWOFZj6uW7DVtM
-# +TOvKPQRQoN2HOqoKQPtScU6ISmCYX+yYJuFColdBuIsJjQoviVXlZkypT6Jt07i
-# M+k7rL8t3MZh6KltgTWFjPnH7GlL6SA2r7B9uT+BE3MAnjjHvsLUCNnvDCsf5huJ
-# GU+KTWOO028V6spOU7IrjVmjhUfC5HkclR8=
+# BgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0yMzA0MTMy
+# MDA5MzJaMD8GCSqGSIb3DQEJBDEyBDD0eQ6LtzvTIfodSvQ9aGS3/0DmeMLoVc0r
+# jPq+1F4zOuVpIYlCgF8CiHP2OVq69ukwDQYJKoZIhvcNAQEBBQAEggIAfgQ76h3l
+# SBu/XoFUgnfsZKDCMiUT1vxef1K2dmKPjtHWltP0WyebPlPCD+NzWfNaaQjH2i8z
+# o/R77nPti9EY9BzgiMjgJlkRgjgTW97m6tUH/Us2UGrqiVoR9fjArlybHRsorpxZ
+# nnx8aj+NeHHov66eApgt4uYqqVLUhcg95bjuXDwiXeplLRo059UPI838uMBnQKR5
+# h4t4QtyUspMAhhyoOhjouLYSKc6z5Kvv7rZ021aAXsr0WGgupdRWSzoAYDCajsUp
+# qX2RIV7VXWJSta2xSCb8DnW/z1mvr0awVrwRqfF9SdwQZYSIgAFpHInh3FHVH5I+
+# ykuYOUZe3Z5o1sN6JGvwviQvdP97UOM42dK+zpHYDs4gH1lMYLevUfi84AyXXPpx
+# jexB46/sc9tZ6x2hhduSrcQUkr0VgcMuNyRyKxmP4IA/WjmXXMxz1FVF8BcMov1l
+# 92RxjO65ctrDVnRVqOSy6bUefFDNW5/x3a3AwIhBB4A+mAuD25oVMixx7lFjwzQq
+# 3xt8Bv36vrp41q1ffvdJpvC+tBhYE1GiVqJRgbmqwD5KQFrC2Ykyws2EAje7r2Vi
+# t3OxEBx/3D70aIK2s39LIwZ3uMfcAPchOF1mGJqMQgOq9DuxW96vBO6NZGMDOo4q
+# 71Dl0qMaNoW2IcqnitNeuEyu8vkrvVAYBSo=
 # SIG # End signature block
